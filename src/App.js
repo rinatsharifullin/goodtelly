@@ -1,24 +1,89 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+
+import { CssBaseline } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+
+import { ReactComponent as Logo } from './static/images/goodtelly-logo.svg';
+
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    backgroundColor: theme.palette.common.white,
+  },
+  toolBar: {
+    minHeight: '72px',
+  },
+  navTitle: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
+  },
+  logo: {
+    margin: `0px ${theme.spacing(2)}px`,
+  },
+}));
+
+const IMAGE_URL = 'https://image.tmdb.org/t/p/w780/';
 
 function App() {
+  const classes = useStyles();
+  const [popularMovies, setPopularMovies] = useState([]);
+  useEffect(() => {
+    const popular_movie_url =
+      'https://api.themoviedb.org/3/movie/popular?api_key=8ab61561b433d00f1836d84e5486ea60&language=en-US&include_adult=false';
+
+    fetch(popular_movie_url)
+      .then((response) => response.json())
+      .then((result) => {
+        setPopularMovies(result.results);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <CssBaseline />
+      <AppBar position="static" className={classes.appBar}>
+        <Toolbar className={classes.toolBar}>
+          <div className={classes.logo}>
+            <Logo />
+          </div>
+          <Typography variant="h6" className={classes.navTitle}>
+            Movies
+          </Typography>
+          <Typography variant="h6" className={classes.navTitle}>
+            TV Shows
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <div>
+        {popularMovies.map((movie) => (
+          <div key={movie.id}>
+            <Card>
+              <CardMedia
+                style={{ height: 500 }}
+                image={`${IMAGE_URL}${movie.poster_path}`}
+                title={movie.title}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {movie.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  component="p"
+                >
+                  {movie.overview}
+                </Typography>
+              </CardContent>
+            </Card>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
