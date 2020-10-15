@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
+import { Switch, Route, Link } from 'react-router-dom';
+
 import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 
 import { ReactComponent as Logo } from './static/images/goodtelly-logo.svg';
+import PopularList from './PopularList';
+import MovieDetails from './MovieDetails';
+import TVDetails from './TVDetails';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -25,21 +29,35 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     margin: `0px ${theme.spacing(2)}px`,
   },
+  main: {
+    marginTop: theme.spacing(2),
+  },
 }));
-
-const IMAGE_URL = 'https://image.tmdb.org/t/p/w780/';
 
 function App() {
   const classes = useStyles();
   const [popularMovies, setPopularMovies] = useState([]);
+  const [popularTVShows, setPopularTVShows] = useState([]);
+
   useEffect(() => {
+    // fetch movies
     const popular_movie_url =
-      'https://api.themoviedb.org/3/movie/popular?api_key=8ab61561b433d00f1836d84e5486ea60&language=en-US&include_adult=false';
+      'https://api.themoviedb.org/3/movie/popular?api_key=b9e04ffd5a10a79d0459e43247be7805&language=en-US&include_adult=false';
 
     fetch(popular_movie_url)
       .then((response) => response.json())
       .then((result) => {
         setPopularMovies(result.results);
+      });
+
+    // fetch TV shows
+    const popular_tv_url =
+      'https://api.themoviedb.org/3/tv/popular?api_key=b9e04ffd5a10a79d0459e43247be7805&language=en-US&include_adult=false';
+
+    fetch(popular_tv_url)
+      .then((response) => response.json())
+      .then((result) => {
+        setPopularTVShows(result.results);
       });
   }, []);
 
@@ -49,41 +67,59 @@ function App() {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
           <div className={classes.logo}>
-            <Logo />
+            <Link to="/">
+              <Logo />
+            </Link>
           </div>
           <Typography variant="h6" className={classes.navTitle}>
-            Movies
+            <Link to="/movie">Movies</Link>
           </Typography>
           <Typography variant="h6" className={classes.navTitle}>
-            TV Shows
+            <Link to="/tv">TV Shows</Link>
           </Typography>
         </Toolbar>
       </AppBar>
-      <div>
-        {popularMovies.map((movie) => (
-          <div key={movie.id}>
-            <Card>
-              <CardMedia
-                style={{ height: 500 }}
-                image={`${IMAGE_URL}${movie.poster_path}`}
-                title={movie.title}
+      <Container maxWidth="lg" className={classes.main}>
+        <Switch>
+          <Route exact path="/">
+            <Box mb={2}>
+              <PopularList
+                items={popularMovies}
+                listTitle="Popular Movies"
               />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {movie.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                >
-                  {movie.overview}
-                </Typography>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
-      </div>
+            </Box>
+
+            <Box mb={2}>
+              <PopularList
+                items={popularTVShows}
+                listTitle="Popular TV Shows"
+              />
+            </Box>
+          </Route>
+          <Route path="/movie/:id">
+            <MovieDetails />
+          </Route>
+          <Route path="/movie">
+            <Box mb={2}>
+              <PopularList
+                items={popularMovies}
+                listTitle="Popular Movies"
+              />
+            </Box>
+          </Route>
+          <Route path="/tv/:id">
+            <TVDetails />
+          </Route>
+          <Route path="/tv">
+            <Box mb={2}>
+              <PopularList
+                items={popularTVShows}
+                listTitle="Popular TV Shows"
+              />
+            </Box>
+          </Route>
+        </Switch>
+      </Container>
     </div>
   );
 }
