@@ -6,7 +6,7 @@ const MovieDetails = () => {
   const [movieDetail, setMovieDetail] = useState({});
 
   useEffect(() => {
-    const movie_detail_url = `https://api.themoviedb.org/3/movie/${id}?api_key=b9e04ffd5a10a79d0459e43247be7805&language=en-US&include_adult=false&append_to_response=credits`;
+    const movie_detail_url = `https://api.themoviedb.org/3/movie/${id}?api_key=8ab61561b433d00f1836d84e5486ea60&language=en-US&include_adult=false&append_to_response=credits`;
     fetch(movie_detail_url)
       .then((response) => response.json())
       .then((result) => {

@@ -42,7 +42,7 @@ function App() {
   useEffect(() => {
     // fetch movies
     const popular_movie_url =
-      'https://api.themoviedb.org/3/movie/popular?api_key=b9e04ffd5a10a79d0459e43247be7805&language=en-US&include_adult=false';
+      'https://api.themoviedb.org/3/movie/popular?api_key=8ab61561b433d00f1836d84e5486ea60&language=en-US&include_adult=false';
 
     fetch(popular_movie_url)
       .then((response) => response.json())
@@ -52,7 +52,7 @@ function App() {
 
     // fetch TV shows
     const popular_tv_url =
-      'https://api.themoviedb.org/3/tv/popular?api_key=b9e04ffd5a10a79d0459e43247be7805&language=en-US&include_adult=false';
+      'https://api.themoviedb.org/3/tv/popular?api_key=8ab61561b433d00f1836d84e5486ea60&language=en-US&include_adult=false';
 
     fetch(popular_tv_url)
       .then((response) => response.json())
