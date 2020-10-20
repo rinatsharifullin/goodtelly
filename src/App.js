@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Switch, Route } from 'react-router-dom';
 
 import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
+// import Box from '@material-ui/core/Box';
 
-import { POPULAR_TV_URL } from './config';
-import PopularList from './PopularList';
+// import { POPULAR_TV_URL } from './config';
+// import PopularList from './PopularList';
 import MovieDetails from './MovieDetails';
 import TVDetails from './TVDetails';
 import Home from './Home';
@@ -24,17 +24,17 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [popularTVShows, setPopularTVShows] = useState([]);
+  // const [popularTVShows, setPopularTVShows] = useState([]);
 
-  useEffect(() => {
-    // fetch TV shows
+  // useEffect(() => {
+  //   // fetch TV shows
 
-    fetch(POPULAR_TV_URL)
-      .then((response) => response.json())
-      .then((result) => {
-        setPopularTVShows(result.results);
-      });
-  }, []);
+  //   fetch(POPULAR_TV_URL)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setPopularTVShows(result.results);
+  //     });
+  // }, []);
 
   return (
     <div>
@@ -63,9 +63,6 @@ function App() {
               />
             </Box>
           </Route> */}
-          <Route path="/tv/:id">
-            <TVDetails />
-          </Route>
           <Route path="/tv">
             <TV />
           </Route>
