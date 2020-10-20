@@ -13,6 +13,7 @@ import MovieDetails from './MovieDetails';
 import TVDetails from './TVDetails';
 import Home from './Home';
 import Movie from './Movie';
+import TV from './TVShow';
 import TopNav from './TopNav';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,13 +55,22 @@ function App() {
           <Route path="/tv/:id">
             <TVDetails />
           </Route>
-          <Route path="/tv">
+          {/* <Route path="/tv">
             <Box mb={2}>
               <PopularList
                 items={popularTVShows}
                 listTitle="Popular TV Shows"
               />
             </Box>
+          </Route> */}
+          <Route path="/tv/:id">
+            <TVDetails />
+          </Route>
+          <Route path="/tv">
+            <TV />
+          </Route>
+          <Route path="/tv/:id">
+            <TVDetails />
           </Route>
         </Switch>
       </Container>
