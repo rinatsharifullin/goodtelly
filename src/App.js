@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Switch, Route } from 'react-router-dom';
 
 import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import Box from '@material-ui/core/Box';
 
-// import { POPULAR_TV_URL } from './config';
-// import PopularList from './PopularList';
+import {
+  POPULAR_TV_URL,
+  SEARCH_TV_URL,
+  POPULAR_MOVIE_URL,
+  SEARCH_MOVIE_URL,
+} from './config';
 import MovieDetails from './MovieDetails';
 import TVDetails from './TVDetails';
 import Home from './Home';
-import Movie from './Movie';
-import TV from './TVShow';
 import TopNav from './TopNav';
+import SearchProgram from './SearchProgram';
+import Signin from './Signin';
+import PrivateRoute from './PrivateRoute';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -24,17 +28,24 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  // const [popularTVShows, setPopularTVShows] = useState([]);
+  const [popularTVShows, setPopularTVShows] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // useEffect(() => {
-  //   // fetch TV shows
+  useEffect(() => {
+    // fetch TV shows
+    fetch(POPULAR_TV_URL)
+      .then((response) => response.json())
+      .then((result) => {
+        setPopularTVShows(result.results);
+      });
 
-  //   fetch(POPULAR_TV_URL)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setPopularTVShows(result.results);
-  //     });
-  // }, []);
+    fetch(POPULAR_MOVIE_URL)
+      .then((response) => response.json())
+      .then((result) => {
+        setPopularMovies(result.results);
+      });
+  }, []);
 
   return (
     <div>
@@ -45,30 +56,29 @@ function App() {
           <Route exact path="/">
             <Home />
           </Route>
-
+          <Route exact path="/signin">
+            <Signin handleAuth={() => setIsAuthenticated(true)} />
+          </Route>
           <Route path="/movie/:id">
             <MovieDetails />
           </Route>
           <Route path="/movie">
-            <Movie />
+            <SearchProgram
+              popularPrograms={popularMovies}
+              searchURL={SEARCH_MOVIE_URL}
+              title="Movies"
+            />
           </Route>
           <Route path="/tv/:id">
             <TVDetails />
           </Route>
-          {/* <Route path="/tv">
-            <Box mb={2}>
-              <PopularList
-                items={popularTVShows}
-                listTitle="Popular TV Shows"
-              />
-            </Box>
-          </Route> */}
-          <Route path="/tv">
-            <TV />
-          </Route>
-          <Route path="/tv/:id">
-            <TVDetails />
-          </Route>
+          <PrivateRoute path="/tv" isAuthenticated={isAuthenticated}>
+            <SearchProgram
+              popularPrograms={popularTVShows}
+              searchURL={SEARCH_TV_URL}
+              title="TV Shows"
+            />
+          </PrivateRoute>
         </Switch>
       </Container>
     </div>
