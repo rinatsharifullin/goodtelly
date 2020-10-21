@@ -62,13 +62,18 @@ function App() {
           <Route path="/movie/:id">
             <MovieDetails />
           </Route>
-          <Route path="/movie">
+          <PrivateRoute
+            path="/movie"
+            isAuthenticated={isAuthenticated}
+          >
+            {/* <Route path="/movie"> */}
             <SearchProgram
               popularPrograms={popularMovies}
               searchURL={SEARCH_MOVIE_URL}
               title="Movies"
             />
-          </Route>
+            {/* </Route> */}
+          </PrivateRoute>
           <Route path="/tv/:id">
             <TVDetails />
           </Route>

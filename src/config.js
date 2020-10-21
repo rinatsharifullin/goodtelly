@@ -11,3 +11,6 @@ export const CREDITS_QUERY = `&append_to_response=credits`;
 export const getMovieDetailsURL = (id) => {
   return `${TMDB_API_URL}movie/${id}${DEFAULT_QUERY}${CREDITS_QUERY}`;
 };
+export const getTVDetailsURL = (id) => {
+  return `${TMDB_API_URL}tv/${id}${DEFAULT_QUERY}${CREDITS_QUERY}`;
+};
