@@ -12,12 +12,15 @@ import {
   POPULAR_MOVIE_URL,
   SEARCH_MOVIE_URL,
 } from './config';
-import MovieDetails from './MovieDetails';
-import TVDetails from './TVDetails';
+
+import ProgramDetails from './components/ProgramDetails';
 import Home from './Home';
-import TopNav from './TopNav';
-import SearchProgram from './SearchProgram';
+import TopNav from './components/TopNav';
+import SearchProgram from './components/SearchProgram';
 import Signin from './Signin';
+import Signup from './Signup';
+import MyList from './MyList';
+
 import PrivateRoute from './PrivateRoute';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +34,7 @@ function App() {
   const [popularTVShows, setPopularTVShows] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authToken, setAuthToken] = useState('');
 
   useEffect(() => {
     // fetch TV shows
@@ -47,42 +51,52 @@ function App() {
       });
   }, []);
 
+  const handleAuth = (token) => {
+    setIsAuthenticated(true);
+    setAuthToken(token);
+    // Should use js-cookies instead. local storage is not secure
+    localStorage.setItem('token', token);
+  };
   return (
     <div>
       <CssBaseline />
-      <TopNav />
+      <TopNav isAuthenticated={isAuthenticated} />
       <Container maxWidth="lg" className={classes.main}>
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
-          <Route exact path="/signin">
-            <Signin handleAuth={() => setIsAuthenticated(true)} />
+          <Route path="/signin">
+            <Signin handleAuth={handleAuth} />
+          </Route>
+          <Route path="/signup">
+            <Signup handleAuth={handleAuth} />
           </Route>
           <Route path="/movie/:id">
-            <MovieDetails />
+            <ProgramDetails programType="movie" />
           </Route>
-          <PrivateRoute
-            path="/movie"
-            isAuthenticated={isAuthenticated}
-          >
-            {/* <Route path="/movie"> */}
+          <Route path="/movie">
             <SearchProgram
               popularPrograms={popularMovies}
               searchURL={SEARCH_MOVIE_URL}
               title="Movies"
             />
-            {/* </Route> */}
-          </PrivateRoute>
-          <Route path="/tv/:id">
-            <TVDetails />
           </Route>
-          <PrivateRoute path="/tv" isAuthenticated={isAuthenticated}>
+          <Route path="/tv/:id">
+            <ProgramDetails programType="tv" />
+          </Route>
+          <Route path="/tv">
             <SearchProgram
               popularPrograms={popularTVShows}
               searchURL={SEARCH_TV_URL}
               title="TV Shows"
             />
+          </Route>
+          <PrivateRoute
+            path="/list"
+            isAuthenticated={isAuthenticated}
+          >
+            <MyList authToken={authToken} />
           </PrivateRoute>
         </Switch>
       </Container>

@@ -8,8 +8,8 @@ import {
   POPULAR_TV_URL,
   TMDB_IMAGE_URL,
 } from './config';
-import PopularList from './PopularList';
-import Hero from './Hero';
+import PopularList from './components/ProgramList';
+import Hero from './components/Hero';
 
 const Home = () => {
   const [popularMovies, setPopularMovies] = useState([]);
