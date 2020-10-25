@@ -7,11 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 
 import { TMDB_IMAGE_URL } from '../config';
-<<<<<<< HEAD
-import PopularList from '../PopularList';
-=======
+
 import PopularList from './ProgramList';
->>>>>>> acaff8e56e45fd4a23c0ac880f53f2faa73c8cfc
+
 import Hero from './Hero';
 
 const useStyles = makeStyles((theme) => ({
